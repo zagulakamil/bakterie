@@ -26,6 +26,11 @@ public class Board extends JPanel {
     }
 
     public void setPathogens(List<Pathogen> list) {
+        for(int i=0; i<board.length; i++) {
+            for(int j=0; j<board[i].length; j++) {
+                board[i][j] = 0;
+            }
+        }
         for(Pathogen p : list) {
             if(p instanceof Worm) {
                 board[p.getX()][p.getY()] = 1;

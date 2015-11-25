@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -28,9 +29,11 @@ public class SimulationEngine implements Runnable {
         for(int i=0;i<settings.getStartWormAmount(); i++) {
             int x=rnd.nextInt(settings.getBoardSize());
             int y=rnd.nextInt(settings.getBoardSize());
-            if(!isPathogenInPosition(x, y))
-                pathogens.add(new Worm(x, y));
-            else
+            if(!isPathogenInPosition(x, y)) {
+                Worm worm = new Worm(x, y);
+                worm.setWeight(settings.getStartWormWeight());
+                pathogens.add(worm);
+            } else
                 i--;
         }
 
@@ -59,6 +62,62 @@ public class SimulationEngine implements Runnable {
             } catch (InterruptedException e) {
                 System.out.println("Niespodziewany nowy przebieg symulacji");
             }
+            // poruszanie robaków
+
+
+            // robaczek zgłodniał po wykonaniu ruchu
+            for(Pathogen p : pathogens) {
+                if(p instanceof Worm) {
+                    ((Worm) p).subtractWeight(1);
+                }
+            }
+
+            // zjadanie przez robaki bakterii
+            Iterator<Pathogen> iterator = pathogens.iterator();
+            while(iterator.hasNext()) {
+                Pathogen p = iterator.next();
+                Iterator<Pathogen> it2 = pathogens.iterator();
+                while(it2.hasNext()) {
+                    Pathogen p2 = it2.next();
+                    if(p instanceof Worm) {
+                        if(p2 instanceof Germ) {
+                            if(p.getX() == p2.getX() && p.getY() == p2.getY()) {
+                                ((Worm)p).addWeight(p2.getWeight());
+                                it2.remove();
+                            }
+                        }
+                    }
+                }
+            }
+
+            // sprawdzanie ktory robaczek umarl
+            iterator = pathogens.iterator();
+            while(iterator.hasNext()) {
+                Pathogen p = iterator.next();
+                if(p.getWeight() == 0) {
+                    iterator.remove();
+                }
+            }
+
+            // rozmnożenie robaczka
+            List<Pathogen> toAdd = new ArrayList<>();
+            for(Pathogen p : pathogens) {
+                if(p instanceof Worm) {
+                    if(p.getWeight() >= settings.getMultiplyWormWeight()) {
+                        int newWeight = p.getWeight() / 2;
+                        p.setWeight(newWeight);
+                        Worm worm = new Worm(p.getX(), p.getY());
+                        worm.setWeight(newWeight);
+                        worm.setGene(((Worm) p).getGene().clone());
+                        ((Worm) p).getGene().changeOneNumber();
+                        worm.getGene().changeOneNumber();
+                        toAdd.add(worm);
+                    }
+                }
+            }
+            pathogens.addAll(toAdd);
+
+            // nowe bakterie
             int x;
             int y;
             do {
@@ -67,6 +126,18 @@ public class SimulationEngine implements Runnable {
             } while(isPathogenInPosition(x, y));
             pathogens.add(new Germ(x, y));
             board.setPathogens(pathogens);
+
+            System.out.println("Ilosc patogenow: "+pathogens.size());
+            int i=0;
+            for(Pathogen p : pathogens) {
+                System.out.println(p);
+                if(p instanceof Worm) {
+                    i++;
+                }
+            }
+            if(i == 0) {
+                System.out.println(" !!!!!!!!!!!!!! BRAK ROBAKÓW !!!!!!!!!!!!!!!! ");
+            }
         }
     }
 }

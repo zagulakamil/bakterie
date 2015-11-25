@@ -52,6 +52,17 @@ public class WindowFrame extends JFrame {
         JTextField startGermAmount = new JTextField(""+this.settings.getStartGermAmount());
         startGermAmount.setPreferredSize(new Dimension(180, 24));
         leftPanel.add(startGermAmount);
+        JLabel startWormWeightLabel = new JLabel("Początkowa waga robaka:");
+        leftPanel.add(startWormWeightLabel);
+        JTextField startWormWeight = new JTextField(""+this.settings.getStartWormWeight());
+        startWormWeight.setPreferredSize(new Dimension(180, 24));
+        leftPanel.add(startWormWeight);
+        JLabel newWormWhenWeightLabel = new JLabel("<html>Waga potrzebna do rozmnozenia:</html>");
+        newWormWhenWeightLabel.setPreferredSize(new Dimension(180, 28));
+        leftPanel.add(newWormWhenWeightLabel);
+        JTextField newWormWhenWeight = new JTextField(""+this.settings.getMultiplyWormWeight());
+        newWormWhenWeight.setPreferredSize(new Dimension(180, 24));
+        leftPanel.add(newWormWhenWeight);
 
         JButton restartButton = new JButton("Restart");
         restartButton.addActionListener(e -> {

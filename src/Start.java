@@ -10,6 +10,8 @@ public class Start {
             settings.setFreqSpawnGerm(2000);
             settings.setStartWormAmount(2);
             settings.setStartGermAmount(10);
+            settings.setStartWormWeight(6);
+            settings.setMultiplyWormWeight(30);
 
             new WindowFrame(settings);
         });

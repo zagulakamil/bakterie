@@ -1,6 +1,4 @@
-/**
- * Created by kamil on 18.11.2015.
- */
+
 public class Pathogen {
 
     private int weight;

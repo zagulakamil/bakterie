@@ -8,6 +8,26 @@ public class Settings {
 
     private int startGermAmount;
 
+    private int startWormWeight;
+
+    private int multiplyWormWeight;
+
+    public int getMultiplyWormWeight() {
+        return multiplyWormWeight;
+    }
+
+    public void setMultiplyWormWeight(int multiplyWormWeight) {
+        this.multiplyWormWeight = multiplyWormWeight;
+    }
+
+    public int getStartWormWeight() {
+        return startWormWeight;
+    }
+
+    public void setStartWormWeight(int startWormWeight) {
+        this.startWormWeight = startWormWeight;
+    }
+
     public int getStartGermAmount() {
         return startGermAmount;
     }
