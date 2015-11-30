@@ -63,8 +63,33 @@ public class SimulationEngine implements Runnable {
                 System.out.println("Niespodziewany nowy przebieg symulacji");
             }
             // poruszanie robaków
-
-
+            for(Pathogen p : pathogens) {
+                if(p instanceof Worm) {
+                    Worm w = (Worm) p;
+                    switch(w.getDirection()) {
+                        case 0:
+                            w.setX(w.getX()+1);
+                            w.setY(w.getY()+1);
+                            break;
+                        case 1:
+                            w.setX(w.getX()+1);
+                            break;
+                        case 2:
+                            w.setY(w.getY()-1);
+                            w.setX(w.getX()+1);
+                            break;
+                        case 3:
+                            w.setY(w.getY()-1);
+                            break;
+                        case 4:
+                            w.setX(w.getX()-1);
+                            break;
+                        case 5:
+                            w.setY(w.getY()+1);
+                            break;
+                    }
+                }
+            }
             // robaczek zgłodniał po wykonaniu ruchu
             for(Pathogen p : pathogens) {
                 if(p instanceof Worm) {
@@ -72,6 +97,7 @@ public class SimulationEngine implements Runnable {
                 }
             }
 
+            List<Pathogen> toRemove = new ArrayList<>();
             // zjadanie przez robaki bakterii
             Iterator<Pathogen> iterator = pathogens.iterator();
             while(iterator.hasNext()) {
@@ -83,11 +109,16 @@ public class SimulationEngine implements Runnable {
                         if(p2 instanceof Germ) {
                             if(p.getX() == p2.getX() && p.getY() == p2.getY()) {
                                 ((Worm)p).addWeight(p2.getWeight());
-                                it2.remove();
+                                toRemove.add(p2);
+                                //it2.remove();
                             }
                         }
                     }
                 }
+            }
+
+            for(int i=0; i<toRemove.size(); i++) {
+                pathogens.remove(toRemove.get(i));
             }
 
             // sprawdzanie ktory robaczek umarl
@@ -137,6 +168,8 @@ public class SimulationEngine implements Runnable {
             }
             if(i == 0) {
                 System.out.println(" !!!!!!!!!!!!!! BRAK ROBAKÓW !!!!!!!!!!!!!!!! ");
+            } else {
+                System.out.println(" !!!!!!!!!!!!!!! "+i+" ROBAKÓW !!!!!!!!!!!!!!!! ");
             }
         }
     }

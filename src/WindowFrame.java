@@ -11,6 +11,10 @@ public class WindowFrame extends JFrame {
 
     private JPanel rightPanel;
 
+    private SimulationEngine engine;
+
+    private Thread thread;
+
     public WindowFrame(Settings settings) {
         super("Robaczki i bakterie");
         this.settings = settings;
@@ -19,8 +23,9 @@ public class WindowFrame extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        SimulationEngine simulationEngine = new SimulationEngine(settings, board);
-        new Thread(simulationEngine).start();
+        engine = new SimulationEngine(settings, board);
+        thread = new Thread(engine);
+        thread.start();
     }
 
     private void drawMyWindowComponents() {
@@ -71,8 +76,12 @@ public class WindowFrame extends JFrame {
             this.settings.setFreqSpawnGerm(Long.parseLong(freqSpawn.getText()));
             this.settings.setStartWormAmount(Integer.parseInt(amountWorm.getText()));
             board.setSettings(this.settings);
-            SimulationEngine simulationEngine = new SimulationEngine(this.settings, board);
-            new Thread(simulationEngine).start();
+            engine.stopSimulation();
+            if(thread != null)
+                thread.interrupt();
+            engine = new SimulationEngine(this.settings, board);
+            thread = new Thread(engine);
+            thread.start();
         });
         leftPanel.add(restartButton);
 
@@ -98,7 +107,8 @@ public class WindowFrame extends JFrame {
 
             @Override
             public void componentShown(ComponentEvent e) {
-
+                leftPanel.setPreferredSize(new Dimension(190, e.getComponent().getHeight()-30));
+                rightPanel.setPreferredSize(new Dimension(e.getComponent().getWidth()-210, e.getComponent().getHeight()-30));
             }
 
             @Override

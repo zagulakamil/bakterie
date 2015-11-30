@@ -24,4 +24,8 @@ public class Gene {
         Random rd = new Random();
         geneNumbers[rd.nextInt(geneNumbers.length)] = rd.nextInt(51);
     }
+
+    public int [] getGene() {
+        return geneNumbers;
+    }
 }

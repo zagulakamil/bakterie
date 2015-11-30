@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public class Worm extends Pathogen {
 
@@ -30,6 +31,11 @@ public class Worm extends Pathogen {
 
     public void subtractWeight(int value) {
         super.setWeight(getWeight()-value);
+    }
+
+    public int getDirection() {
+        Random rd = new Random();
+        return gene.getGene()[rd.nextInt(gene.getGene().length)] % 6;
     }
 
     @Override

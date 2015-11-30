@@ -32,10 +32,12 @@ public class Board extends JPanel {
             }
         }
         for(Pathogen p : list) {
-            if(p instanceof Worm) {
-                board[p.getX()][p.getY()] = 1;
-            } else {
-                board[p.getX()][p.getY()] = 2;
+            if(p.getY() >= 0 && p.getX() >= 0 && p.getY() < board.length && p.getX() < board.length) {
+                if (p instanceof Worm) {
+                    board[p.getX()][p.getY()] = 1;
+                } else {
+                    board[p.getX()][p.getY()] = 2;
+                }
             }
         }
         invalidate();
