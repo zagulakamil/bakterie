@@ -7,11 +7,11 @@ public class Start {
 
             Settings settings = new Settings();
             settings.setBoardSize(15);
-            settings.setFreqSpawnGerm(2000);
-            settings.setStartWormAmount(2);
+            settings.setFreqSpawnGerm(100);
+            settings.setStartWormAmount(20);
             settings.setStartGermAmount(10);
-            settings.setStartWormWeight(6);
-            settings.setMultiplyWormWeight(30);
+            settings.setStartWormWeight(30);
+            settings.setMultiplyWormWeight(31);
 
             new WindowFrame(settings);
         });

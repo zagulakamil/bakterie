@@ -56,7 +56,9 @@ public class SimulationEngine implements Runnable {
     @Override
     public void run() {
         Random rnd = new Random();
+        int simulationCount = 0;
         while(simulation) {
+            simulationCount++;
             try {
                 Thread.sleep(settings.getFreqSpawnGerm());
             } catch (InterruptedException e) {
@@ -70,22 +72,46 @@ public class SimulationEngine implements Runnable {
                         case 0:
                             w.setX(w.getX()+1);
                             w.setY(w.getY()+1);
+                            if(w.getX() >= board.getBoardSize()) {
+                                w.setX(w.getX()-board.getBoardSize());
+                            }
+                            if(w.getY() >= board.getBoardSize()) {
+                                w.setY(w.getY()-board.getBoardSize());
+                            }
                             break;
                         case 1:
                             w.setX(w.getX()+1);
+                            if(w.getX() >= board.getBoardSize()) {
+                                w.setX(w.getX()-board.getBoardSize());
+                            }
                             break;
                         case 2:
                             w.setY(w.getY()-1);
                             w.setX(w.getX()+1);
+                            if(w.getX() >= board.getBoardSize()) {
+                                w.setX(w.getX()-board.getBoardSize());
+                            }
+                            if(w.getY() >= board.getBoardSize()) {
+                                w.setY(w.getY()-board.getBoardSize());
+                            }
                             break;
                         case 3:
                             w.setY(w.getY()-1);
+                            if(w.getY() >= board.getBoardSize()) {
+                                w.setY(w.getY()-board.getBoardSize());
+                            }
                             break;
                         case 4:
                             w.setX(w.getX()-1);
+                            if(w.getX() >= board.getBoardSize()) {
+                                w.setX(w.getX()-board.getBoardSize());
+                            }
                             break;
                         case 5:
                             w.setY(w.getY()+1);
+                            if(w.getY() >= board.getBoardSize()) {
+                                w.setY(w.getY()-board.getBoardSize());
+                            }
                             break;
                     }
                 }
@@ -149,13 +175,15 @@ public class SimulationEngine implements Runnable {
             pathogens.addAll(toAdd);
 
             // nowe bakterie
-            int x;
-            int y;
-            do {
-                x = rnd.nextInt(settings.getBoardSize());
-                y = rnd.nextInt(settings.getBoardSize());
-            } while(isPathogenInPosition(x, y));
-            pathogens.add(new Germ(x, y));
+            if(simulationCount % 5 == 0) {
+                int x;
+                int y;
+                do {
+                    x = rnd.nextInt(settings.getBoardSize());
+                    y = rnd.nextInt(settings.getBoardSize());
+                } while (isPathogenInPosition(x, y));
+                pathogens.add(new Germ(x, y));
+            }
             board.setPathogens(pathogens);
 
             System.out.println("Ilosc patogenow: "+pathogens.size());
@@ -166,8 +194,23 @@ public class SimulationEngine implements Runnable {
                     i++;
                 }
             }
+            if(simulationCount % 100 == 0) {
+                for(Pathogen p : pathogens) {
+                    if( p instanceof Worm) {
+                        System.out.println("Geny robaka: "+((Worm)p).getGene());
+                    }
+                }
+                simulation = false;
+            }
             if(i == 0) {
                 System.out.println(" !!!!!!!!!!!!!! BRAK ROBAKÓW !!!!!!!!!!!!!!!! ");
+            } else if( i == 1) {
+                    for(Pathogen p : pathogens) {
+                        if( p instanceof Worm) {
+                            System.out.println("Geny robaka: "+((Worm)p).getGene());
+                        }
+                    }
+                    simulation = false;
             } else {
                 System.out.println(" !!!!!!!!!!!!!!! "+i+" ROBAKÓW !!!!!!!!!!!!!!!! ");
             }

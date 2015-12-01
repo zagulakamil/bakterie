@@ -95,4 +95,7 @@ public class Board extends JPanel {
         }
     }
 
+    public int getBoardSize() {
+        return board.length;
+    }
 }

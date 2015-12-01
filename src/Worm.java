@@ -7,7 +7,6 @@ public class Worm extends Pathogen {
     public Worm() {
         super();
         super.setStatus(2);
-        super.setWeight(5);
         gene = new Gene();
     }
 
@@ -35,7 +34,33 @@ public class Worm extends Pathogen {
 
     public int getDirection() {
         Random rd = new Random();
-        return gene.getGene()[rd.nextInt(gene.getGene().length)] % 6;
+        double [] tmp = new double[6];
+        double sum = 0;
+        for(int i=0; i<gene.getGene().length; i++) {
+            tmp[i] = p(i);
+            sum += tmp[i];
+        }
+        for ( int i=0; i<gene.getGene().length; i++) {
+            tmp[i] = (tmp[i]/sum)*100;
+        }
+        int rand = rd.nextInt(101);
+        double tempsum = 0;
+        for ( int i=0; i<gene.getGene().length; i++) {
+            tempsum += gene.getGene()[i];
+            if(rand < tempsum) return i;
+
+        }
+
+        return 0;
+    }
+
+    private double p(int ki) {
+        int sum = 0;
+        for(int i=0; i<gene.getGene().length; i++) {
+            sum += Math.exp(gene.getGene()[i]);
+        }
+
+        return Math.exp(gene.getGene()[ki])/sum;
     }
 
     @Override
